@@ -3,3 +3,5 @@
 .settings
 *sublime*
 target*
+cobertura.ser
+web-app/
