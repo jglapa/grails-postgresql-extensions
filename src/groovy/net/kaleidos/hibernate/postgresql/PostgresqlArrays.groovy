@@ -2,8 +2,9 @@ package net.kaleidos.hibernate.postgresql
 
 import grails.orm.HibernateCriteriaBuilder
 import net.kaleidos.hibernate.criterion.PgContainsExpression
+import net.kaleidos.hibernate.criterion.PgEqualsExpression
 import net.kaleidos.hibernate.criterion.PgIsContainedByExpression
-import net.kaleidos.hibernate.criterion.PgOverlapExpression;
+import net.kaleidos.hibernate.criterion.PgOverlapExpression
 
 import org.hibernate.criterion.Restrictions
 
@@ -43,6 +44,16 @@ class PostgresqlArrays {
          */
         org.hibernate.criterion.Restrictions.metaClass.'static'.pgOverlaps = { String propertyName, Object value ->
             return new PgOverlapExpression(propertyName, value)
+        }
+
+        /**
+         * Apply a "pgEquals" constraint to the named property
+         * @param propertyName
+         * @param value value
+         * @return Criterion
+         */
+        org.hibernate.criterion.Restrictions.metaClass.'static'.pgEquals = { String propertyName, Object value ->
+            return new PgEqualsExpression(propertyName, value)
         }
 
 
@@ -98,6 +109,24 @@ class PostgresqlArrays {
             propertyValue = calculatePropertyValue(propertyValue);
 
             return addToCriteria(Restrictions.pgOverlaps(propertyName, propertyValue));
+        }
+
+        /**
+         * Creates an "equals in native array" Criterion based on the specified property name and value
+         * @param propertyName The property name
+         * @param propertyValue The property value
+         * @return A Criterion instance
+         */
+        HibernateCriteriaBuilder.metaClass.pgEquals = { String propertyName, Object propertyValue ->
+            if (!validateSimpleExpression()) {
+                throwRuntimeException(new IllegalArgumentException("Call to [pgEquals] with propertyName [" +
+                        propertyName + "] and value [" + propertyValue + "] not allowed here."));
+            }
+
+            propertyName = calculatePropertyName(propertyName);
+            propertyValue = calculatePropertyValue(propertyValue);
+
+            return addToCriteria(Restrictions.pgEquals(propertyName, propertyValue));
         }
     }
 

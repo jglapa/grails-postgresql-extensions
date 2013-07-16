@@ -9,17 +9,17 @@ import org.hibernate.type.Type;
 import org.hibernate.util.StringHelper;
 
 /**
- * Check if two arrays overlaps
+ * Check if two arrays are equal
  */
-public class PgOverlapExpression implements Criterion {
+public class PgEqualsExpression implements Criterion {
 
-    private static final long serialVersionUID = 8263961731207700428L;
+    private static final long serialVersionUID = -6766276257966403620L;
 
     private final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
     private final String propertyName;
     private final Object value;
 
-    protected PgOverlapExpression(String propertyName, Object value) {
+    protected PgEqualsExpression(String propertyName, Object value) {
         this.propertyName = propertyName;
         this.value = value;
     }
@@ -27,7 +27,7 @@ public class PgOverlapExpression implements Criterion {
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
             " and ",
-            StringHelper.suffix( criteriaQuery.findColumns(propertyName, criteria), " && ARRAY[?]" )
+            StringHelper.suffix( criteriaQuery.findColumns(propertyName, criteria), " = ARRAY[?]" )
         );
     }
 
