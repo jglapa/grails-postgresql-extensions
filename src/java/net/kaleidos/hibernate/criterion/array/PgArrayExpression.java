@@ -31,7 +31,7 @@ public class PgArrayExpression implements Criterion {
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
             " and ",
-            StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " " + op + " ARRAY[?]")
+            StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " " + op + " CAST(ARRAY[?] AS citext[])")
         );
     }
 
@@ -48,6 +48,7 @@ public class PgArrayExpression implements Criterion {
                 value,
                 Integer.class,
                 new PgCriteriaUtils.MapFunction() {
+                    @Override
                     @SuppressWarnings("rawtypes")
                     public Object map(Object o) {
                         try {
@@ -61,6 +62,8 @@ public class PgArrayExpression implements Criterion {
         } else if ("net.kaleidos.hibernate.usertype.LongArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Long.class);
         } else if ("net.kaleidos.hibernate.usertype.StringArrayType".equals(propertyTypeName)) {
+            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, String.class);
+        } else if ("net.kaleidos.hibernate.usertype.CaseInsensitiveStringArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, String.class);
         } else {
             throw new HibernateException("Native array for this type is not supported");

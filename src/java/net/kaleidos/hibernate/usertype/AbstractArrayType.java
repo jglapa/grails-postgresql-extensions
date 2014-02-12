@@ -10,6 +10,7 @@ public abstract class AbstractArrayType implements UserType {
     protected static final int LONG_ARRAY = 90002;
     protected static final int STRING_ARRAY = 90003;
     protected static final int ENUM_INTEGER_ARRAY = 90004;
+    protected static final int CASE_INSENSITIVE_STRING_ARRAY = 90005;
 
     @Override
     public Object assemble(Serializable cached, Object owner) throws HibernateException {

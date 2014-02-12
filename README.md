@@ -1,6 +1,11 @@
 Grails Postgresql Extensions
 ============================
 
+
+CREATE EXTENSION IF NOT EXISTS citext;
+
+
+
 [![Still maintained](http://stillmaintained.com/lmivan/grails-postgresql-extensions.png)](http://stillmaintained.com/lmivan/grails-postgresql-extensions)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kaleidos/grails-postgresql-extensions/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

@@ -2,9 +2,8 @@ package net.kaleidos.hibernate.hstore
 
 import grails.plugin.spock.*
 import spock.lang.*
-
 import test.hstore.TestHstore
-import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType
+import test.hstore.TestHstoreNullable
 
 class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
 
@@ -67,5 +66,17 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             [foo:"bar", xxx:"abc"] | 'xxx'             | 1
             ["foo,bar":"baz,qux"]  | 'foo,bar'         | 0
             [foo:"bar"]            | 'xxx'             | 1
+    }
+@IgnoreRest
+    @Issue("https://github.com/kaleidos/grails-postgresql-extensions/issues/24")
+    void 'save a instance with a nullable hstore'() {
+        setup:
+            def testHstoreNullable = new TestHstoreNullable(name: 'foo')
+
+        when:
+            testHstoreNullable.save()
+
+        then:
+            testHstoreNullable.hasErrors() == false
     }
 }

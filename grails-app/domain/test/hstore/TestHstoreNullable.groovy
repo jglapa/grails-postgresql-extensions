@@ -4,16 +4,14 @@ import net.kaleidos.hibernate.postgresql.hstore.Hstore
 import net.kaleidos.hibernate.usertype.HstoreType
 import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType
 
-class TestHstore {
+class TestHstoreNullable {
     String name
-    Integer luckyNumber
 
     @Hstore
-    Map testAttributes
+    Map testAttributes = new HstoreDomainType([:])
 
     static constraints = {
-        name nullable: true
-        luckyNumber nullable: true
+        //testAttributes nullable: true
     }
     static mapping = {
         testAttributes type:HstoreType

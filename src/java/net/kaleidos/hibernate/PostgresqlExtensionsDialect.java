@@ -1,10 +1,11 @@
 package net.kaleidos.hibernate;
 
+import net.kaleidos.hibernate.usertype.CaseInsensitiveStringArrayType;
 import net.kaleidos.hibernate.usertype.HstoreType;
+import net.kaleidos.hibernate.usertype.IdentityEnumArrayType;
 import net.kaleidos.hibernate.usertype.IntegerArrayType;
 import net.kaleidos.hibernate.usertype.LongArrayType;
 import net.kaleidos.hibernate.usertype.StringArrayType;
-import net.kaleidos.hibernate.usertype.IdentityEnumArrayType;
 
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
@@ -28,6 +29,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
         registerColumnType(IdentityEnumArrayType.SQLTYPE, "int[]");
         registerColumnType(StringArrayType.SQLTYPE, "varchar[]");
         registerColumnType(HstoreType.SQLTYPE, "hstore");
+        registerColumnType(CaseInsensitiveStringArrayType.SQLTYPE, "citext[]");
     }
 
     /**

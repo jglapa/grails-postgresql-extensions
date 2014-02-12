@@ -7,6 +7,7 @@ import test.array.TestEnum
 import test.array.TestInteger
 import test.array.TestLong
 import test.array.TestString
+import test.array.TestCaseInsensitiveString
 
 class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
 
@@ -43,7 +44,7 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
     }
 
     @Unroll
-    void 'save a domain class with an string array value'() {
+    void 'save a domain class with a string array value'() {
         setup:
             def testString = new TestString(stringArray:strings)
 
@@ -72,6 +73,22 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
 
         where:
             days << [ [], [TestEnum.Day.MONDAY], [TestEnum.Day.SUNDAY, TestEnum.Day.SATURDAY], [TestEnum.Day.WEDNESDAY, TestEnum.Day.THURSDAY, TestEnum.Day.TUESDAY] ]
+    }
+@spock.lang.IgnoreRest
+    @Unroll
+    void 'save a domain class with a case insensitive string array value'() {
+        setup:
+            def testCaseInsensitiveString = new TestCaseInsensitiveString(caseInsensitiveStringArray:strings)
+
+        when:
+            testCaseInsensitiveString.save()
+
+        then:
+            testCaseInsensitiveString.hasErrors() == false
+            testCaseInsensitiveString.caseInsensitiveStringArray.length == strings.size()
+
+        where:
+            strings << [ [], ["StrIng 1"], ["sTriNG 1", "strIng 2"], ["STring 1", "stRing 2", "stRiNg 3"] ]
     }
 
 }
